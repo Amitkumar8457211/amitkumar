@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body class="container mt-5"> 
+    <form class="w-50 mx-auto" id="login-form">
+        <div class="form-group">
+            <label >Useremail</label><br/>
+            <input id="email" type="mail" name="useremail" class="form-control" required />
+        </div>
+        <div class="form-group">     
+            <label >Price</label><br/>
+            <input id="price" type="number" name="userprice" class="form-control" required/>
+        </div>  
+        <div class="form-group">     
+            <label >Discount</label><br/>
+            <input id="discount" type="number" name="userdiscount" class="form-control" required />
+        </div>  
+        
+        <input type="submit" class="btn btn-danger" value="Submit" class="form-control" />
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+    //get the form from DOM (Document object model) 
+    var form = document.getElementById('login-form');
+
+    form.onsubmit = function(event){
+        event.preventDefault();
+        var email = document.getElementById('email').value;
+        var price = document.getElementById('price').value;
+        var discount = document.getElementById('discount').value;
+
+        if(!email || !price || !discount){
+            alert("All field is required");
+            return;
+        }
+        var finalprice = price - discount;
+
+        var dataSet = {
+            "host" : "smtp.googlemail.com",
+            "port" :  465,
+            "mailfrom" : "<mailid>",
+            "mailfromname" : "Amit",
+            "mailpassword" : "<password>",
+            "mailaddress" : email,
+            "mailaddressname" : "Amit kumar",
+            "mailsubject" : "Testing",
+            "mailbody" : "Your final amount is "+finalprice
+        }
+        $.ajax({
+            type: "POST",
+            url: "https://uat-logistics.dependo.com/alert/sendmail.php",
+            dataType:"JSON",
+            data: JSON.stringify(dataSet),
+            success: function(response) {
+                alert("Send");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status != 200) {
+                    alert("fail");
+                } else {
+                    alert("send");
+                }
+            }
+        });
+    }
+</script>
+</html>
